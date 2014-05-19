@@ -19,8 +19,12 @@ import com.luckypants.command.DeleteBookCommand;
 import com.luckypants.command.GetBookCommand;
 import com.luckypants.command.ListAllBooksCommand;
 import com.luckypants.model.Book;
+import com.luckypants.mongo.BooksConnectionProvider;
+import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+//import com.luckypants.mongo.BooksConnectionProvider;
+//import com.mongodb.DBCollection;
 
 @Path("/books")
 public class BookService {
