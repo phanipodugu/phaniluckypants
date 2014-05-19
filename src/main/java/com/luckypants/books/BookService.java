@@ -19,6 +19,7 @@ import com.luckypants.command.DeleteBookCommand;
 import com.luckypants.command.GetBookCommand;
 import com.luckypants.command.ListAllBooksCommand;
 import com.luckypants.model.Book;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 @Path("/books")
@@ -37,9 +38,28 @@ public class BookService {
 	@Path("/{isbn}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getBook(@PathParam("isbn") String isbn) {
-		GetBookCommand getBookCommand = new GetBookCommand();
-		DBObject book = getBookCommand.execute(isbn);
-		return Response.status(200).entity(book).build();
+		
+		
+		
+		ArrayList<DBObject> result = new ArrayList<DBObject>();
+		BooksConnectionProvider booksConn=new BooksConnectionProvider();
+		DBCollection booksCollection=booksConn.getCollection();
+		
+		DBCursor cursor=booksCollection.find();
+		while(cursor.hasNext()){
+			DBObject obj=cursor.next();
+			if(obj.get("author")!=null&&obj.get("author").equals(isbn)){
+				result.add(obj);
+			}else if(obj.get("title")!=null&& obj.get("title").equals(isbn)){
+				result.add(obj);
+			}else if(obj.get("isbn")!=null&&obj.get("isbn").equals(isbn)){
+				result.add(obj);
+			}
+		}
+
+		//GetBookCommand getBookCommand = new GetBookCommand();
+		//DBObject book = getBookCommand.execute(isbn);
+		return Response.status(200).entity(result).build();
 	}
 
 	@PUT
